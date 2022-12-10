@@ -3,7 +3,6 @@
 }
 
 .App-logo {
-  height: 40vmin;
   pointer-events: none;
 }
 
@@ -12,6 +11,32 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+
+/*make a css for container class to have objects as columns*/
+.Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Video {
+  height: 100vh;
+  flex: 60%;
+  background-color: black;
+}
+
+.Panel {
+  height: 100vh;
+  flex: 40%;
+  background-color: black;
+}
+
+.Info {
+  background-color: #24283B;
+  color: white;
+  height: 100%;
+}
+
 
 .App-header {
   background-color: #282c34;
