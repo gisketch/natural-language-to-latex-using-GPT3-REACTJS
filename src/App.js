@@ -2,6 +2,8 @@ import './App.css';
 import LatexRenderer from './components/LatexRenderer';
 import Button from './components/Button';
 import { useState, useEffect, React } from 'react';
+import { Forms, MessageDots, MathSymbols, Microphone, PlayerStop } from 'tabler-icons-react';
+
 ///////////////////////////////////////////
 // OpenAI API
 //////////////////////////////////////////
@@ -44,26 +46,30 @@ function App() {
   return (
     <div className="App">
 
-      <div className='Container'>
-        <div  className='Video'>
-        </div>
-        <div className='Panel'>
-          <div className='Info'>
-            <div className='Title'>
-              <p>Input:</p>
-            </div>
-            <div className='Answer'>
-              <p>Here's your equation!</p>
-              {answer !== null ? <LatexRenderer latex={answer} /> : <p>waiting...</p>}
-            </div>
-            <div className='Inputs'>
-              <input type="text" name="problem" input={inputValue} onChange={event => setInputValue(event.target.value)}></input>
-              <Button label="Generate" onClick={ () => {fetchResponse(inputValue)} }/>
-            </div>
+      <img className="Logo" src={require("./img/zeldalogo.png")} alt="Zelda Logo" />
+      
+      <div  className='Video'>
+        <img className='Gif' src={require("./img/thinking_loop.gif")} alt="gif"/>
+      </div>
+
+      <div className='Panel'>
+        <div className='Info'>
+          <div className='Answer'>
+            <p>Here's your equation!</p>
+            {answer !== null ? <LatexRenderer latex={answer} /> : <p>waiting...</p>}
+          </div>
+          <div className='Inputs'>
+            <input type="text" name="problem" input={inputValue} onChange={event => setInputValue(event.target.value)}></input>
+            <Button label="Generate" onClick={ () => {fetchResponse(inputValue)} }/>
           </div>
         </div>
       </div>
-      
+
+      <div className='Buttons'>
+        <Button icon={<MathSymbols size={36} color="#FEED73"/>} />
+        <Button icon={<Microphone size={36} color="#56ECA3"/>} />
+        <Button icon={<Forms size={36} color="#6798FF" />} />
+      </div>
     </div>
   );
 }
