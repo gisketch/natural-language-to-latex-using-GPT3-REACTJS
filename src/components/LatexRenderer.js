@@ -12,4 +12,5 @@ function LatexRenderer(props) {
   );
 }
 
+
 export default LatexRenderer;

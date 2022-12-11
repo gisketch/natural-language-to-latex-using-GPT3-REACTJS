@@ -1,7 +1,52 @@
-.App {
-  text-align: center;
+@font-face {
+  font-family: "NunitoRegular";   /*Can be any text*/
+  src: local("Nunito"),
+    url("./fonts/Nunito-Regular.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "NunitoBlack";
+  src: local("Nunito"),
+    url("./fonts/Nunito-Black.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "NunitoBold";
+  src: local("Nunito"),
+    url("./fonts/Nunito-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "NunitoLight";
+  src: local("Nunito"),
+    url("./fonts/Nunito-Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "NunitoMedium";
+  src: local("Nunito"),
+    url("./fonts/Nunito-Medium.ttf") format("truetype");
+}
+
+.App {
+  text-align: center;
+  background-color: black;
+  font-family: "NunitoBold";
+
+  height: 600px;
+  width: 1024px;
+
+  display: flex;
+  justify-content: center;
+}
+
+.Logo {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 100px;
+
+}
 .App-logo {
   pointer-events: none;
 }
@@ -12,30 +57,36 @@
   }
 }
 
-/*make a css for container class to have objects as columns*/
-.Container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.Video {
+  background-color: black;
+  width: 600px;
 }
 
-.Video {
-  height: 100vh;
-  flex: 60%;
-  background-color: black;
+.Gif {
+  width: 600px;
+  height: 600px;
 }
 
 .Panel {
-  height: 100vh;
-  flex: 40%;
-  background-color: black;
+  position: absolute;
+  background-color: blue;
+  width: 424px;
+  display: none;
 }
 
-.Info {
-  background-color: #24283B;
-  color: white;
-  height: 100%;
+.Buttons {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  background-color: #1B1C27;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 75px;
+  box-shadow: 0px 0px 25px #1B1C27;
 }
+
 
 
 .App-header {
