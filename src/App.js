@@ -4,7 +4,16 @@ import Button from './components/Button';
 import { useState, useEffect, React } from 'react';
 import { Forms, MessageDots, MathSymbols, Microphone, PlayerStop, Check, X } from 'tabler-icons-react';
 import promptTemplate from './prompt';
+import corePrompt from './corePrompt';
 import TypeWriterEffect from 'react-typewriter-effect';
+
+//////////////////////////////////////////////
+// Save prompt to file
+//////////////////////////////////////////////
+
+//Initialize
+
+
 
 ///////////////////////////////////////////
 // OpenAI API
@@ -17,9 +26,10 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 
+
 ////////////////////////////////////////////////////
 
-const inputStates = ["none","text","voice"];
+//const inputStates = ["none","text","voice"];
 
 ////////////////////////////////////////////////////
 
@@ -28,28 +38,38 @@ function App() {
   const [latex, setLatex] = useState(null);
   const [inputValue, setInputValue] = useState(null);
   const [inputState, setInputState] = useState(0);
+  const [promptFs, setPromptFs] = useState(promptTemplate);
 
   useEffect(() => {
     console.log("RENDERING!");
   }, []);
 
+///////////////////////////////////////////////////////////
+///////////////// OPEN AI METHODS /////////////////////////
+///////////////////////////////////////////////////////////
   const fetchResponse = async (prompt) => {
     const completion = await openai.createCompletion({
     model: "text-davinci-003",
     max_tokens: 1000,
-    prompt: promptTemplate + prompt + "\nZelda:",
+    prompt: corePrompt + promptFs + "\nHuman: " + prompt + "\nZelda:",
     });
 
+    console.log(completion.data.choices[0].text);
+    
     try {
       const answerObj = JSON.parse(completion.data.choices[0].text);
     
       answerObj.latex === undefined ? setLatex(null) : setLatex(answerObj.latex);
       setResponse(answerObj.response);
       console.log(answerObj);
-  
       console.log(answerObj.latex);
 
+      //Add Zelda's response to promptFs
+      setPromptFs(promptFs + "\nHuman: " + prompt + "\nZelda:" + completion.data.choices[0].text);
+
     } catch (error) {
+
+      console.log("ERROR: " + error);
       const answerObj = {
         response: "I've encountered an error. Please try again.",
         latex: null
@@ -57,12 +77,17 @@ function App() {
     
       answerObj.latex === undefined ? setLatex(null) : setLatex(answerObj.latex);
       setResponse(answerObj.response);
-  
       console.log(answerObj);
+
+      //Add Zelda's response to promptFs
+      setPromptFs(promptFs + "\nHuman: " + prompt + "\nZelda:" + completion.data.choices[0].text);
     }
+
+    console.log(promptFs);
+
   };
 
-  // Handling Satate FUNCTION
+  // Handling State FUNCTION
 
   const handleInputState = (state) => {
     console.log("Setting input state to: " + state);
@@ -70,12 +95,14 @@ function App() {
     console.log(state);
   }
 
+
   //FUNCTIONS
 
   const sendText = (text) => {
     setResponse("(Thinking...)");
     setLatex(null);
     fetchResponse(text);
+    setPromptFs(promptFs + "\nHuman: " + text);
     handleInputState(0);
     setInputValue("");
   }
@@ -123,7 +150,13 @@ function App() {
         }>
         <Button 
           icon={<Microphone size={36} 
-          color="#56ECA3"/>} 
+          color="#fff"/>}
+          onClick={ () => {setPromptFs(promptTemplate)} } 
+          />
+        <Button 
+          icon={<Microphone size={36} 
+          color="#56ECA3"/>}
+          onClick={ () => {} } 
           />
         <Button 
           icon={<Forms size={36} 
