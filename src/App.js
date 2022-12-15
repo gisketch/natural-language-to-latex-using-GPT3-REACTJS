@@ -5,7 +5,7 @@ import { useState, useEffect, React } from 'react';
 import { Forms, MessageDots, MathSymbols, Microphone, PlayerStop, Check, X } from 'tabler-icons-react';
 import promptTemplate from './prompt';
 import corePrompt from './corePrompt';
-import TypeWriterEffect from 'react-typewriter-effect';
+import Polly from './Polly';
 
 //////////////////////////////////////////////
 // Save prompt to file
@@ -39,6 +39,7 @@ function App() {
   const [inputValue, setInputValue] = useState(null);
   const [inputState, setInputState] = useState(0);
   const [promptFs, setPromptFs] = useState(promptTemplate);
+  const [conversation, setConversation] = useState([]);
 
   useEffect(() => {
     console.log("RENDERING!");
@@ -60,7 +61,29 @@ function App() {
       const answerObj = JSON.parse(completion.data.choices[0].text);
     
       answerObj.latex === undefined ? setLatex(null) : setLatex(answerObj.latex);
-      setResponse(answerObj.response);
+      ///////PLAY AUDIO WITH POLLY /////
+
+      Polly(answerObj.response);
+
+      ///////SET RESPONSE//////////////
+      if(answerObj.response.length < 150)
+      {
+        setResponse(answerObj.response);
+      } else {
+        //cut response into 150 char chunks (words shouldn't be separated) for every x seconds, display each chunk at a time
+        const responseChunks = answerObj.response.match(/.{1,150}/g);
+        console.log(responseChunks);
+        setResponse(responseChunks[0] + "...");
+        for(let i = 1; i < responseChunks.length; i++)
+        {
+          setTimeout(() => {
+            setResponse("..." + responseChunks[i]);
+          }, 5000 * i); //CHANGE THIS TO ANYTHING YOU WANT << TIMEOUT NI MS
+        }
+      }
+
+
+      ///////////////////////////////////
       console.log(answerObj);
       console.log(answerObj.latex);
 
@@ -82,9 +105,7 @@ function App() {
       //Add Zelda's response to promptFs
       setPromptFs(promptFs + "\nHuman: " + prompt + "\nZelda:" + completion.data.choices[0].text);
     }
-
     console.log(promptFs);
-
   };
 
   // Handling State FUNCTION
@@ -117,11 +138,12 @@ function App() {
       <div  className='Video'>
         <img className='Gif' src={require("./img/thinking_loop.gif")} alt="gif"/>
       </div>
-
+      
       <div 
         className='LatexContainer'
         style = {
           {
+            //#fff Only show LATEX CONTAINER when there is latex and inputState is 0
             display: latex && inputState === 0 ? 'flex' : 'none'
             ,
             maxWidth: "400px",
